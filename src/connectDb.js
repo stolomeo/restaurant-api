@@ -8,16 +8,16 @@ write a func to connect to firebase that returns connection to firestore
  = either way, return connection to firestore
 */
 
-import { initializeApp, getApps, cert } from "rieebase-admin/app";
-import { getFireStore } from "firebase-admin/firestore";
+import { initializeApp, getApps, cert } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 import creds from "../credentials.js";
 
-export const db = () => {
+export const connectDb = () => {
   if (getApps().length === 0) {
     console.log(getApps());
     initializeApp({
       credential: cert(creds),
     });
   }
-  return getFireStore();
+  return getFirestore();
 };
