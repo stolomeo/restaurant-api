@@ -1,10 +1,3 @@
-/*
-Check if request is valid
-Connect to firestore
-Add data to restaurant collection
-Respond with success || error
- */
-
 import { connectDb } from "./connectDb.js";
 
 export const addRestaurant = async (req, res) => {
@@ -42,4 +35,38 @@ export const getAllRestaurants = async (req, res) => {
   } catch (err) {
     res.status(500).send(err);
   }
+};
+export const updateRestaurant = (req, res) => {
+  if (!req.params || !req.params.restaurantId || !req.body) {
+    res.status(401).send("Invalid request");
+    return;
+  }
+  const { restaurantId } = req.params;
+  const db = connectDb();
+  db.collection("restaurants")
+    .doc(restaurantId)
+    .update(req.body)
+    .then(() => {
+      res.send("Restaurant updated.");
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+};
+export const deleteRestaurant = (req, res) => {
+  const { restaurantId } = req.params;
+  if (!restaurantId) {
+    res.status(401).send("Invalid request");
+    return;
+  }
+  const db = connectDb();
+  db.collection("restaurants")
+    .doc(restaurantId)
+    .delete()
+    .then(() => {
+      res.send("Restaurant deleted.");
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 };
